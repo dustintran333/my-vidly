@@ -1,0 +1,69 @@
+﻿@using System.Web.Razor
+@using my_vidly.Models
+@model my_vidly.ViewModels.MovieFormViewModel
+
+@{
+	ViewBag.Title = "View";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+
+@using (Html.BeginForm("Save", "Movies"))
+{
+
+	<div class="form-horizontal">
+
+		@Html.ValidationSummary(true, "Please fix following errors", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.Movie.Id)
+		@Html.AntiForgeryToken()
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Movie.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Movie.Name, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Movie.Name, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Movie.GenreId, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.DropDownListFor(model => model.Movie.GenreId, 
+					new SelectList(Model.Genres, "Id", "Name"), 
+					"Select Genre", 
+					htmlAttributes: new { @class = "form-control" } )
+				@Html.ValidationMessageFor(model => model.Movie.GenreId, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Movie.ReleaseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.TextBoxFor(model => model.Movie.ReleaseDate, "{0:d}", new { @class = "form-control" })
+				@Html.ValidationMessageFor(model => model.Movie.ReleaseDate, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Movie.NumberInStock, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.Movie.NumberInStock, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Movie.NumberInStock, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Save" class="btn btn-primary" />
+			</div>
+		</div>
+	</div>
+}
+@section scripts
+{
+	@Scripts.Render("~/bundles/jqueryval")
+}
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
